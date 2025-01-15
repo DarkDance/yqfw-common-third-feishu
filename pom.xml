@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.1</version>
+    </parent>
+
+    <groupId>cn.jzyunqi</groupId>
+    <artifactId>yqfw-common-third-feishu</artifactId>
+    <version>0.0.5-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <yqfw.version>0.0.5-SNAPSHOT</yqfw.version>
+        <oapi-sdk.version>2.4.7</oapi-sdk.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.jzyunqi</groupId>
+            <artifactId>yqfw-common-core</artifactId>
+            <version>${yqfw.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.larksuite.oapi</groupId>
+            <artifactId>oapi-sdk</artifactId>
+            <version>${oapi-sdk.version}</version>
+        </dependency>
+    </dependencies>
+</project>
