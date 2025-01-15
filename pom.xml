@@ -31,10 +31,18 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- 飞书核心包 -->
         <dependency>
             <groupId>com.larksuite.oapi</groupId>
             <artifactId>oapi-sdk</artifactId>
             <version>${oapi-sdk.version}</version>
+        </dependency>
+
+        <!-- 基本的第三方帮组组件 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

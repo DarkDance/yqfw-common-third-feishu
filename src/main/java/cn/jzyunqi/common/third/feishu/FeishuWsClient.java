@@ -61,10 +61,10 @@ public class FeishuWsClient {
                         throw new RuntimeException(e);
                     }
                 }
-                Client demanderClient = new Client.Builder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
+                Client wsClient = new Client.Builder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
                         .eventHandler(dispatcherBuilder.build())
                         .build();
-                demanderClient.start();
+                wsClient.start();
                 log.info("FeishuWsClient [{}] init success", feishuAuth.getAppId());
             }
         }
