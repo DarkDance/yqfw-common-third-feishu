@@ -14,27 +14,15 @@ import java.util.Map;
 @Setter
 @ToString
 public class EventCbData {
-    /**
-     * 加密的事件数，解密后出现下面的全部数据
-     */
+    //加密的事件数，解密后出现下面的全部数据
     private String encrypt;
 
-    /**
-     * 第一次联通数据，应用需要在响应中原样返回的值
-     */
+    //第一次联通数据的3个字段
     private String challenge;
-
-    /**
-     * 第一次联通数据，固定值为url_verification
-     */
     private String type;
-
-    /**
-     * 第一次联通数据，校验用
-     */
     private String token;
 
+    //后续的业务数据
     private String schema;
     private EventHeaderData header;
-    private Map<String, Object> event;
 }
