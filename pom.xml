@@ -12,7 +12,6 @@
     <artifactId>yqfw-common-third-feishu</artifactId>
 
     <properties>
-        <yqfw.version>0.0.5-SNAPSHOT</yqfw.version>
         <oapi-sdk.version>2.4.7</oapi-sdk.version>
     </properties>
 
