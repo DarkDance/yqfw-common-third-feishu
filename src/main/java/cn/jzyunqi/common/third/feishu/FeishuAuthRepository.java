@@ -1,5 +1,7 @@
 package cn.jzyunqi.common.third.feishu;
 
+import cn.jzyunqi.common.utils.StringUtilPlus;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,10 @@ public interface FeishuAuthRepository {
     List<FeishuAuth> getFeishuAuthList();
 
     default FeishuAuth getFeishuAuth(String appId) {
-        return getFeishuAuthList().stream().filter(authInfo -> authInfo.getAppId().equals(appId)).findFirst().orElse(new FeishuAuth());
+        if (StringUtilPlus.isEmpty(appId)) {
+            return getFeishuAuthList().stream().findFirst().orElse(new FeishuAuth());
+        } else {
+            return getFeishuAuthList().stream().filter(authInfo -> authInfo.getAppId().equals(appId)).findFirst().orElse(new FeishuAuth());
+        }
     }
 }
