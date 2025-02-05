@@ -16,7 +16,7 @@
 * 配置自己的飞书信息
 ```java
 @Bean
-public FeishuClientConfig feishuClientConfig() {
+public FeishuAuthRepository feishuAuthRepository() {
     return () -> List.of(
             new FeishuAuth("xxx", "yyy"),
             new FeishuAuth("eee", "zzz")

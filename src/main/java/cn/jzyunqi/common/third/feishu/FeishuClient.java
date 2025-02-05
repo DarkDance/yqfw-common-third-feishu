@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class FeishuClient {
 
     @Resource
-    private FeishuClientConfig feishuClientConfig;
+    private FeishuAuthRepository feishuClientConfig;
 
     private final Map<String, Client> clientMap = new ConcurrentHashMap<>();
 

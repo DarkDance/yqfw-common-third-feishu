@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class FeishuWsClient {
 
     @Resource
-    private FeishuClientConfig feishuClientConfig;
+    private FeishuAuthRepository feishuClientConfig;
 
     @Autowired(required = false)
     private List<IEventHandler<?>> eventHandlerList;

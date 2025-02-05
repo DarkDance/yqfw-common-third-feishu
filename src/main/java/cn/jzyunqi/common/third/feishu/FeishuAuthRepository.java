@@ -6,7 +6,7 @@ import java.util.List;
  * @author wiiyaya
  * @since 2025/1/15
  */
-public interface FeishuClientConfig {
+public interface FeishuAuthRepository {
 
     List<FeishuAuth> getFeishuAuthList();
 
