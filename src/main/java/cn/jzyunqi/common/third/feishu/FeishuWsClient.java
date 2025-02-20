@@ -1,5 +1,6 @@
 package cn.jzyunqi.common.third.feishu;
 
+import cn.jzyunqi.common.utils.CollectionUtilPlus;
 import com.lark.oapi.event.EventDispatcher;
 import com.lark.oapi.event.ICallBackHandler;
 import com.lark.oapi.event.IEventHandler;
@@ -50,7 +51,7 @@ public class FeishuWsClient {
      */
     public void addWsClient(FeishuAuth feishuAuth) {
         prepareAndStart(feishuAuth);
-        log.info("FeishuWsClient [{}] init success", feishuAuth.getAppId());
+        log.info("FeishuWsClient [{}] addWsClient success", feishuAuth.getAppId());
     }
 
     /**
@@ -66,21 +67,26 @@ public class FeishuWsClient {
         Map<String, Method> methodMap = Arrays.stream(methods).collect(Collectors.toMap(Method::getName, method -> method));
 
         //设置feishu事件处理
-        for (IEventHandler<?> eventHandler : eventHandlerList) {
-            String eventName = eventHandler.getEvent().getClass().getSimpleName();
-            try {
-                methodMap.get("on" + eventName).invoke(dispatcherBuilder, eventHandler);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        if(CollectionUtilPlus.Collection.isNotEmpty(eventHandlerList)){
+            for (IEventHandler<?> eventHandler : eventHandlerList) {
+                String eventName = eventHandler.getEvent().getClass().getSimpleName();
+                try {
+                    methodMap.get("on" + eventName).invoke(dispatcherBuilder, eventHandler);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
+
         //设置feishu回调处理
-        for (ICallBackHandler<?, ?> callBackHandler : callbackHandlerList) {
-            String eventName = callBackHandler.getEvent().getClass().getSimpleName();
-            try {
-                methodMap.get("on" + eventName).invoke(dispatcherBuilder, callBackHandler);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        if(CollectionUtilPlus.Collection.isNotEmpty(callbackHandlerList)){
+            for (ICallBackHandler<?, ?> callBackHandler : callbackHandlerList) {
+                String eventName = callBackHandler.getEvent().getClass().getSimpleName();
+                try {
+                    methodMap.get("on" + eventName).invoke(dispatcherBuilder, callBackHandler);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         Client wsClient = new Client.Builder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
