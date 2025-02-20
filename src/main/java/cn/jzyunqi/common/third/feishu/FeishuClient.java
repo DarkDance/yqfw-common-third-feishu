@@ -24,16 +24,40 @@ public class FeishuClient {
     public void init() {
         List<FeishuAuth> feishuAuthList = feishuClientConfig.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
-            Client client = Client.newBuilder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
-                    .requestTimeout(5, TimeUnit.SECONDS)
-                    //.disableTokenCache()
-                    .logReqAtDebug(true)
-                    .build();
-            clientMap.put(feishuAuth.getAppId(), client);
+            clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
         }
     }
 
+    /**
+     * 选择一个飞书应用
+     *
+     * @param feishuAuthId 飞书应用ID
+     * @return 飞书应用
+     */
     public Client chooseClient(String feishuAuthId) {
         return clientMap.get(feishuAuthId);
+    }
+
+    /**
+     * 添加一个新的飞书应用
+     *
+     * @param feishuAuth 飞书应用授权信息
+     */
+    public void addClient(FeishuAuth feishuAuth) {
+        clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+    }
+
+    /**
+     * 组装飞书应用客户端
+     *
+     * @param feishuAuth 飞书应用授权信息
+     * @return 飞书应用客户端
+     */
+    private Client getClient(FeishuAuth feishuAuth) {
+        return Client.newBuilder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
+                .requestTimeout(5, TimeUnit.SECONDS)
+                //.disableTokenCache()
+                .logReqAtDebug(true)
+                .build();
     }
 }
