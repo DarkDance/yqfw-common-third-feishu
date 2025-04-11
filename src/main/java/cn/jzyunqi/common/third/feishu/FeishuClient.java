@@ -44,7 +44,9 @@ public class FeishuClient {
      * @param feishuAuth 飞书应用授权信息
      */
     public void addClient(FeishuAuth feishuAuth) {
-        clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+        if (!clientMap.containsKey(feishuAuth.getAppId())) {
+            clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+        }
     }
 
     /**

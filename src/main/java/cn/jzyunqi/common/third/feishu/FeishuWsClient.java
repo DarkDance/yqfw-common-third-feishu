@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +34,8 @@ public class FeishuWsClient {
     @Autowired(required = false)
     private List<ICallBackHandler<?, ?>> callbackHandlerList;
 
+    private final Map<String, Client> clientMap = new ConcurrentHashMap<>();
+
     @PostConstruct
     public void init() {
         List<FeishuAuth> feishuAuthList = feishuClientConfig.getFeishuAuthList();
@@ -50,7 +53,9 @@ public class FeishuWsClient {
      * @param feishuAuth 飞书应用授权信息
      */
     public void addWsClient(FeishuAuth feishuAuth) {
-        prepareAndStart(feishuAuth);
+        if (!clientMap.containsKey(feishuAuth.getAppId())) {
+            clientMap.put(feishuAuth.getAppId(), prepareAndStart(feishuAuth));
+        }
         log.info("FeishuWsClient [{}] addWsClient success", feishuAuth.getAppId());
     }
 
@@ -59,7 +64,7 @@ public class FeishuWsClient {
      *
      * @param feishuAuth 飞书应用授权信息
      */
-    private void prepareAndStart(FeishuAuth feishuAuth) {
+    private Client prepareAndStart(FeishuAuth feishuAuth) {
         EventDispatcher.Builder dispatcherBuilder = EventDispatcher.newBuilder(feishuAuth.getVerificationToken(), feishuAuth.getEncryptKey());
 
         //获取builder的所有方法
@@ -93,5 +98,6 @@ public class FeishuWsClient {
                 .eventHandler(dispatcherBuilder.build())
                 .build();
         wsClient.start();
+        return wsClient;
     }
 }
