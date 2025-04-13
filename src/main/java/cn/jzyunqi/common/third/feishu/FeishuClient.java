@@ -3,6 +3,7 @@ package cn.jzyunqi.common.third.feishu;
 import com.lark.oapi.Client;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author wiiyaya
  * @since 2025/1/15
  */
+@Slf4j
 public class FeishuClient {
 
     @Resource
@@ -56,10 +58,15 @@ public class FeishuClient {
      * @return 飞书应用客户端
      */
     private Client getClient(FeishuAuth feishuAuth) {
-        return Client.newBuilder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
-                .requestTimeout(5, TimeUnit.SECONDS)
-                //.disableTokenCache()
-                .logReqAtDebug(true)
-                .build();
+        try {
+            return Client.newBuilder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
+                    .requestTimeout(5, TimeUnit.SECONDS)
+                    //.disableTokenCache()
+                    .logReqAtDebug(true)
+                    .build();
+        } catch (Exception e) {
+            log.error("FeishuWsClient [{}] prepareAndStart error", feishuAuth.getAppId());
+            throw e;
+        }
     }
 }

@@ -65,39 +65,44 @@ public class FeishuWsClient {
      * @param feishuAuth 飞书应用授权信息
      */
     private Client prepareAndStart(FeishuAuth feishuAuth) {
-        EventDispatcher.Builder dispatcherBuilder = EventDispatcher.newBuilder(feishuAuth.getVerificationToken(), feishuAuth.getEncryptKey());
+        try {
+            EventDispatcher.Builder dispatcherBuilder = EventDispatcher.newBuilder(feishuAuth.getVerificationToken(), feishuAuth.getEncryptKey());
 
-        //获取builder的所有方法
-        Method[] methods = ReflectionUtils.getDeclaredMethods(dispatcherBuilder.getClass());
-        Map<String, Method> methodMap = Arrays.stream(methods).collect(Collectors.toMap(Method::getName, method -> method));
+            //获取builder的所有方法
+            Method[] methods = ReflectionUtils.getDeclaredMethods(dispatcherBuilder.getClass());
+            Map<String, Method> methodMap = Arrays.stream(methods).collect(Collectors.toMap(Method::getName, method -> method));
 
-        //设置feishu事件处理
-        if(CollectionUtilPlus.Collection.isNotEmpty(eventHandlerList)){
-            for (IEventHandler<?> eventHandler : eventHandlerList) {
-                String eventName = eventHandler.getEvent().getClass().getSimpleName();
-                try {
-                    methodMap.get("on" + eventName).invoke(dispatcherBuilder, eventHandler);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            //设置feishu事件处理
+            if(CollectionUtilPlus.Collection.isNotEmpty(eventHandlerList)){
+                for (IEventHandler<?> eventHandler : eventHandlerList) {
+                    String eventName = eventHandler.getEvent().getClass().getSimpleName();
+                    try {
+                        methodMap.get("on" + eventName).invoke(dispatcherBuilder, eventHandler);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
-        }
 
-        //设置feishu回调处理
-        if(CollectionUtilPlus.Collection.isNotEmpty(callbackHandlerList)){
-            for (ICallBackHandler<?, ?> callBackHandler : callbackHandlerList) {
-                String eventName = callBackHandler.getEvent().getClass().getSimpleName();
-                try {
-                    methodMap.get("on" + eventName).invoke(dispatcherBuilder, callBackHandler);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            //设置feishu回调处理
+            if(CollectionUtilPlus.Collection.isNotEmpty(callbackHandlerList)){
+                for (ICallBackHandler<?, ?> callBackHandler : callbackHandlerList) {
+                    String eventName = callBackHandler.getEvent().getClass().getSimpleName();
+                    try {
+                        methodMap.get("on" + eventName).invoke(dispatcherBuilder, callBackHandler);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
+            Client wsClient = new Client.Builder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
+                    .eventHandler(dispatcherBuilder.build())
+                    .build();
+            wsClient.start();
+            return wsClient;
+        } catch (Exception e) {
+            log.error("FeishuWsClient [{}] prepareAndStart error", feishuAuth.getAppId());
+            throw e;
         }
-        Client wsClient = new Client.Builder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
-                .eventHandler(dispatcherBuilder.build())
-                .build();
-        wsClient.start();
-        return wsClient;
     }
 }
