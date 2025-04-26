@@ -20,14 +20,12 @@ public class FeishuClient {
     @Resource
     private FeishuAuthRepository feishuAuthRepository;
 
-    private final Map<String, FeishuAuth> authMap = new ConcurrentHashMap<>();
     private final Map<String, Client> clientMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
         List<FeishuAuth> feishuAuthList = feishuAuthRepository.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
-            authMap.put(feishuAuth.getAppId(), feishuAuth);
             clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
         }
     }
@@ -40,16 +38,6 @@ public class FeishuClient {
      */
     public Client chooseClient(String feishuAuthId) {
         return clientMap.get(feishuAuthId);
-    }
-
-    /**
-     * 选择一个飞书应用授权信息
-     *
-     * @param feishuAuthId 飞书应用ID
-     * @return 飞书应用授权信息
-     */
-    public FeishuAuth chooseFeishuAuth(String feishuAuthId) {
-        return authMap.get(feishuAuthId);
     }
 
     /**

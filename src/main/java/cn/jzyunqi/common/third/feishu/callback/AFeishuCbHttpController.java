@@ -2,7 +2,7 @@ package cn.jzyunqi.common.third.feishu.callback;
 
 import cn.jzyunqi.common.exception.BusinessException;
 import cn.jzyunqi.common.third.feishu.FeishuAuth;
-import cn.jzyunqi.common.third.feishu.FeishuClient;
+import cn.jzyunqi.common.third.feishu.FeishuAuthRepository;
 import cn.jzyunqi.common.third.feishu.callback.module.EventCbData;
 import cn.jzyunqi.common.utils.DigestUtilPlus;
 import cn.jzyunqi.common.utils.StringUtilPlus;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public abstract class AFeishuCbHttpController {
 
     @Resource
-    private FeishuClient feishuClient;
+    private FeishuAuthRepository feishuAuthRepository;
 
     @Autowired(required = false)
     private List<IEventHandler<?>> eventHandlerList;
@@ -47,7 +47,7 @@ public abstract class AFeishuCbHttpController {
 
     @PostConstruct
     public void init() {
-        FeishuAuth feishuAuth = feishuClient.chooseFeishuAuth(getAppId());
+        FeishuAuth feishuAuth = feishuAuthRepository.chooseFeishuAuth(getAppId());
         EventDispatcher.Builder dispatcherBuilder = EventDispatcher.newBuilder(feishuAuth.getVerificationToken(), feishuAuth.getEncryptKey());
         //获取builder的所有方法
         Method[] methods = ReflectionUtils.getDeclaredMethods(dispatcherBuilder.getClass());
@@ -94,7 +94,7 @@ public abstract class AFeishuCbHttpController {
                 headers,
                 eventCbDataStr
         );
-        FeishuAuth feishuAuth = feishuClient.chooseFeishuAuth(getAppId());
+        FeishuAuth feishuAuth = feishuAuthRepository.chooseFeishuAuth(getAppId());
         String encryptKey = feishuAuth.getEncryptKey();
         if (StringUtilPlus.isNotEmpty(eventCbData.getEncrypt())) {
             //解密
