@@ -26,5 +26,14 @@ public abstract class FeishuAuthRepository implements InitializingBean {
         return authMap.get(feishuAuthId);
     }
 
+
+    public void addDifyAuth(FeishuAuth feishuAuth) {
+        authMap.put(feishuAuth.getAppId(), feishuAuth);
+    }
+
+    public void removeDifyAuth(String feishuAuthId) {
+        authMap.remove(feishuAuthId);
+    }
+
     public abstract List<FeishuAuth> getFeishuAuthList();
 }
