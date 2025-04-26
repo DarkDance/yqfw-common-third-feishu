@@ -18,13 +18,13 @@ import java.util.concurrent.TimeUnit;
 public class FeishuClient {
 
     @Resource
-    private FeishuAuthRepository feishuClientConfig;
+    private FeishuAuthRepository feishuAuthRepository;
 
     private final Map<String, Client> clientMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
-        List<FeishuAuth> feishuAuthList = feishuClientConfig.getFeishuAuthList();
+        List<FeishuAuth> feishuAuthList = feishuAuthRepository.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
             clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
         }
