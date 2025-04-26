@@ -11,12 +11,4 @@ import java.util.List;
 public interface FeishuAuthRepository {
 
     List<FeishuAuth> getFeishuAuthList();
-
-    default FeishuAuth getFeishuAuth(String appId) {
-        if (StringUtilPlus.isEmpty(appId)) {
-            return getFeishuAuthList().stream().findFirst().orElse(new FeishuAuth());
-        } else {
-            return getFeishuAuthList().stream().filter(authInfo -> authInfo.getAppId().equals(appId)).findFirst().orElse(new FeishuAuth());
-        }
-    }
 }

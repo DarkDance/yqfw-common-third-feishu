@@ -2,7 +2,7 @@ package cn.jzyunqi.common.third.feishu.callback;
 
 import cn.jzyunqi.common.exception.BusinessException;
 import cn.jzyunqi.common.third.feishu.FeishuAuth;
-import cn.jzyunqi.common.third.feishu.FeishuAuthRepository;
+import cn.jzyunqi.common.third.feishu.FeishuClient;
 import cn.jzyunqi.common.third.feishu.callback.module.EventCbData;
 import cn.jzyunqi.common.utils.DigestUtilPlus;
 import cn.jzyunqi.common.utils.StringUtilPlus;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public abstract class AFeishuCbHttpController {
 
     @Resource
-    private FeishuAuthRepository feishuAuthRepository;
+    private FeishuClient feishuClient;
 
     @Autowired(required = false)
     private List<IEventHandler<?>> eventHandlerList;
@@ -47,7 +47,7 @@ public abstract class AFeishuCbHttpController {
 
     @PostConstruct
     public void init() {
-        FeishuAuth feishuAuth = feishuAuthRepository.getFeishuAuth(getAppId());
+        FeishuAuth feishuAuth = feishuClient.chooseFeishuAuth(getAppId());
         EventDispatcher.Builder dispatcherBuilder = EventDispatcher.newBuilder(feishuAuth.getVerificationToken(), feishuAuth.getEncryptKey());
         //获取builder的所有方法
         Method[] methods = ReflectionUtils.getDeclaredMethods(dispatcherBuilder.getClass());
@@ -94,7 +94,7 @@ public abstract class AFeishuCbHttpController {
                 headers,
                 eventCbDataStr
         );
-        FeishuAuth feishuAuth = feishuAuthRepository.getFeishuAuth(getAppId());
+        FeishuAuth feishuAuth = feishuClient.chooseFeishuAuth(getAppId());
         String encryptKey = feishuAuth.getEncryptKey();
         if (StringUtilPlus.isNotEmpty(eventCbData.getEncrypt())) {
             //解密
@@ -120,9 +120,9 @@ public abstract class AFeishuCbHttpController {
         String timestamp = headers.get("X-Lark-Request-Timestamp");
         String nonce = headers.get("X-Lark-Request-Nonce");
         String headerSign = headers.get("X-Lark-Signature");
-        if(StringUtilPlus.isNotEmpty(headerSign)){
+        if (StringUtilPlus.isNotEmpty(headerSign)) {
             String sign = DigestUtilPlus.SHA.sign(timestamp + nonce + encryptKey + eventCbDataStr, DigestUtilPlus.SHAAlgo._256, Boolean.FALSE);
-            if(!headerSign.equals(sign)){
+            if (!headerSign.equals(sign)) {
                 throw new BusinessException("签名验证失败");
             }
         }
