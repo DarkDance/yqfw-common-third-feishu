@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class FeishuWsClient {
 
     @Resource
-    private FeishuAuthRepository feishuClientConfig;
+    private FeishuAuthRepository feishuAuthRepository;
 
     @Autowired(required = false)
     private List<IEventHandler<?>> eventHandlerList;
@@ -38,7 +38,7 @@ public class FeishuWsClient {
 
     @PostConstruct
     public void init() {
-        List<FeishuAuth> feishuAuthList = feishuClientConfig.getFeishuAuthList();
+        List<FeishuAuth> feishuAuthList = feishuAuthRepository.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
             if (feishuAuth.getWsConnect()) {
                 prepareAndStart(feishuAuth);
