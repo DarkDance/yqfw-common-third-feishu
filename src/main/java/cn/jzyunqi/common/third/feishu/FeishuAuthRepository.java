@@ -2,6 +2,7 @@ package cn.jzyunqi.common.third.feishu;
 
 import org.springframework.beans.factory.InitializingBean;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,7 +17,7 @@ public abstract class FeishuAuthRepository implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        List<FeishuAuth> feishuAuthList = getFeishuAuthList();
+        List<FeishuAuth> feishuAuthList = initFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
             authMap.put(feishuAuth.getAppId(), feishuAuth);
         }
@@ -26,14 +27,17 @@ public abstract class FeishuAuthRepository implements InitializingBean {
         return authMap.get(feishuAuthId);
     }
 
-
-    public void addDifyAuth(FeishuAuth feishuAuth) {
+    public void addFeishuAuth(FeishuAuth feishuAuth) {
         authMap.put(feishuAuth.getAppId(), feishuAuth);
     }
 
-    public void removeDifyAuth(String feishuAuthId) {
+    public void removeFeishuAuth(String feishuAuthId) {
         authMap.remove(feishuAuthId);
     }
 
-    public abstract List<FeishuAuth> getFeishuAuthList();
+    public List<FeishuAuth> getFeishuAuthList() {
+        return new ArrayList<>(authMap.values());
+    }
+
+    public abstract List<FeishuAuth> initFeishuAuthList();
 }
