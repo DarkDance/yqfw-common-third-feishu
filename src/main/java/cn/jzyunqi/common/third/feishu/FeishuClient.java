@@ -48,6 +48,7 @@ public class FeishuClient {
     public void addClient(FeishuAuth feishuAuth) {
         if (!clientMap.containsKey(feishuAuth.getAppId())) {
             clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+            feishuAuthRepository.addFeishuAuth(feishuAuth);
         }
     }
 
