@@ -1,6 +1,9 @@
 package cn.jzyunqi.common.third.feishu;
 
 import com.lark.oapi.Client;
+import com.lark.oapi.core.Config;
+import com.lark.oapi.core.enums.AppType;
+import com.lark.oapi.core.enums.BaseUrlEnum;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +51,17 @@ public class FeishuClient {
     public void addClient(FeishuAuth feishuAuth) {
         if (!clientMap.containsKey(feishuAuth.getAppId())) {
             clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+        }else{
+            Config config = new Config();
+            config.setAppId(feishuAuth.getAppId());
+            config.setAppSecret(feishuAuth.getAppSecret());
+            config.setBaseUrl(BaseUrlEnum.FeiShu.getUrl());
+            config.setAppType(AppType.SELF_BUILT);
+            config.setDisableTokenCache(false);
+            config.setRequestTimeOut(5);
+            config.setTimeOutTimeUnit(TimeUnit.SECONDS);
+            config.setLogReqAtDebug(true);
+            clientMap.get(feishuAuth.getAppId()).setConfig(config);
         }
     }
 
