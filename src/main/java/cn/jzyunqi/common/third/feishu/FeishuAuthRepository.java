@@ -28,9 +28,7 @@ public abstract class FeishuAuthRepository implements InitializingBean {
     }
 
     public void addFeishuAuth(FeishuAuth feishuAuth) {
-        if (!authMap.containsKey(feishuAuth.getAppId())) {
-            authMap.put(feishuAuth.getAppId(), feishuAuth);
-        }
+        authMap.put(feishuAuth.getAppId(), feishuAuth);
     }
 
     public void removeFeishuAuth(String feishuAuthId) {
