@@ -4,6 +4,7 @@ import cn.jzyunqi.common.exception.BusinessException;
 import cn.jzyunqi.common.third.feishu.FeishuAuth;
 import cn.jzyunqi.common.third.feishu.FeishuAuthRepository;
 import cn.jzyunqi.common.third.feishu.callback.module.EventCbData;
+import cn.jzyunqi.common.utils.CollectionUtilPlus;
 import cn.jzyunqi.common.utils.DigestUtilPlus;
 import cn.jzyunqi.common.utils.StringUtilPlus;
 import com.lark.oapi.core.Constants;
@@ -55,21 +56,25 @@ public abstract class AFeishuCbHttpController {
         Map<String, Method> methodMap = Arrays.stream(methods).collect(Collectors.toMap(Method::getName, method -> method));
 
         //设置feishu事件处理
-        for (IEventHandler<?> eventHandler : eventHandlerList) {
-            String eventName = eventHandler.getEvent().getClass().getSimpleName();
-            try {
-                methodMap.get("on" + eventName).invoke(dispatcherBuilder, eventHandler);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        if (CollectionUtilPlus.Collection.isEmpty(eventHandlerList)) {
+            for (IEventHandler<?> eventHandler : eventHandlerList) {
+                String eventName = eventHandler.getEvent().getClass().getSimpleName();
+                try {
+                    methodMap.get("on" + eventName).invoke(dispatcherBuilder, eventHandler);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         //设置feishu回调处理
-        for (ICallBackHandler<?, ?> callBackHandler : callbackHandlerList) {
-            String eventName = callBackHandler.getEvent().getClass().getSimpleName();
-            try {
-                methodMap.get("on" + eventName).invoke(dispatcherBuilder, callBackHandler);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        if(CollectionUtilPlus.Collection.isNotEmpty(callbackHandlerList)){
+            for (ICallBackHandler<?, ?> callBackHandler : callbackHandlerList) {
+                String eventName = callBackHandler.getEvent().getClass().getSimpleName();
+                try {
+                    methodMap.get("on" + eventName).invoke(dispatcherBuilder, callBackHandler);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         eventDispatcher = dispatcherBuilder.build();
