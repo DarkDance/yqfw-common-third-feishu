@@ -14,4 +14,9 @@ public class FeishuConfig {
     public FeishuClient feishuClient() {
         return new FeishuClient();
     }
+
+    @Bean
+    public FeishuWsClient feishuWsClient() {
+        return new FeishuWsClient();
+    }
 }
