@@ -40,7 +40,7 @@ public class FeishuWsClient {
     public void init() {
         List<FeishuAuth> feishuAuthList = feishuAuthHelper.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
-            if (feishuAuth.getWsConnect()) {
+            if (feishuAuth.getWsConnect() && !clientMap.containsKey(feishuAuth.getAppId())) {
                 clientMap.put(feishuAuth.getAppId(), prepareAndStart(feishuAuth));
             }
         }

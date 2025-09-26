@@ -29,7 +29,9 @@ public class FeishuClient {
     public void init() {
         List<FeishuAuth> feishuAuthList = feishuAuthHelper.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
-            clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+            if(!clientMap.containsKey(feishuAuth.getAppId())){
+                clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+            }
         }
     }
 
