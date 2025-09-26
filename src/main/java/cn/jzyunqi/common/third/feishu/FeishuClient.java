@@ -31,6 +31,8 @@ public class FeishuClient {
         for (FeishuAuth feishuAuth : feishuAuthList) {
             if(!clientMap.containsKey(feishuAuth.getAppId())){
                 clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+            }else{
+                log.info("FeishuClient [{}] already init", feishuAuth.getAppId());
             }
         }
     }
