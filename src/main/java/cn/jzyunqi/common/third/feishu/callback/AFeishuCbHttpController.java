@@ -2,7 +2,7 @@ package cn.jzyunqi.common.third.feishu.callback;
 
 import cn.jzyunqi.common.exception.BusinessException;
 import cn.jzyunqi.common.third.feishu.FeishuAuth;
-import cn.jzyunqi.common.third.feishu.FeishuAuthRepository;
+import cn.jzyunqi.common.third.feishu.FeishuAuthHelper;
 import cn.jzyunqi.common.third.feishu.callback.module.EventCbData;
 import cn.jzyunqi.common.utils.CollectionUtilPlus;
 import cn.jzyunqi.common.utils.DigestUtilPlus;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public abstract class AFeishuCbHttpController {
 
     @Resource
-    private FeishuAuthRepository feishuAuthRepository;
+    private FeishuAuthHelper feishuAuthHelper;
 
     @Autowired(required = false)
     private List<IEventHandler<?>> eventHandlerList;
@@ -105,7 +105,7 @@ public abstract class AFeishuCbHttpController {
                 eventCbDataStr
         );
 
-        FeishuAuth feishuAuth = feishuAuthRepository.chooseFeishuAuth(appId);
+        FeishuAuth feishuAuth = feishuAuthHelper.chooseFeishuAuth(appId);
         // 先解密
         if (StringUtilPlus.isNotEmpty(eventCbData.getEncrypt())) {
             eventCbData = decryptEvent(eventCbData.getEncrypt(), feishuAuth.getEncryptKey());
