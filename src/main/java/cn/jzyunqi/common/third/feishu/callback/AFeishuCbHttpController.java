@@ -56,7 +56,7 @@ public abstract class AFeishuCbHttpController {
         Map<String, Method> methodMap = Arrays.stream(methods).collect(Collectors.toMap(Method::getName, method -> method));
 
         //设置feishu事件处理
-        if (CollectionUtilPlus.Collection.isEmpty(eventHandlerList)) {
+        if (CollectionUtilPlus.Collection.isNotEmpty(eventHandlerList)) {
             for (IEventHandler<?> eventHandler : eventHandlerList) {
                 String eventName = eventHandler.getEvent().getClass().getSimpleName();
                 try {
