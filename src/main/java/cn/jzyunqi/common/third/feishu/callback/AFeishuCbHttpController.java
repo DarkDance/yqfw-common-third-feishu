@@ -7,8 +7,8 @@ import cn.jzyunqi.common.third.feishu.callback.module.EventCbData;
 import cn.jzyunqi.common.utils.CollectionUtilPlus;
 import cn.jzyunqi.common.utils.DigestUtilPlus;
 import cn.jzyunqi.common.utils.StringUtilPlus;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lark.oapi.core.Constants;
-import com.lark.oapi.core.utils.Jsons;
 import com.lark.oapi.event.EventDispatcher;
 import com.lark.oapi.event.ICallBackHandler;
 import com.lark.oapi.event.IEventHandler;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +46,9 @@ public abstract class AFeishuCbHttpController {
     private List<ICallBackHandler<?, ?>> callbackHandlerList;
 
     private EventDispatcher eventDispatcher;
+
+    @Resource
+    private ObjectMapper objectMapper;
 
     @PostConstruct
     public void init() {
@@ -116,9 +118,9 @@ public abstract class AFeishuCbHttpController {
         verifySign(eventCbDataStr, headers, feishuAuth.getEncryptKey());
 
         try {
-            return eventDispatcher.doWithoutValidation(eventCbDataStr.getBytes(StandardCharsets.UTF_8));
+            return eventDispatcher.doWithoutValidation(objectMapper.writeValueAsBytes(eventCbData));
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(e, "事件处理失败");
         }
     }
 
@@ -173,7 +175,7 @@ public abstract class AFeishuCbHttpController {
         byte[] contentByte = Arrays.copyOfRange(decode, 16, decode.length);
         try {
             String content = DigestUtilPlus.AES.decryptCBCPKCS7Padding(contentByte, DigestUtilPlus.Base64.decodeBase64(key), iv);
-            return Jsons.DEFAULT.fromJson(content, EventCbData.class);
+            return objectMapper.readValue(content, EventCbData.class);
         } catch (Exception e) {
             throw new BusinessException("解密失败");
         }

@@ -25,4 +25,5 @@ public class EventCbData {
     //后续的业务数据
     private String schema;
     private EventHeaderData header;
+    private Object event;
 }
