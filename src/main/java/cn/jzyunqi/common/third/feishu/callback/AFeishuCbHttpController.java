@@ -67,7 +67,7 @@ public abstract class AFeishuCbHttpController {
             }
         }
         //设置feishu回调处理
-        if(CollectionUtilPlus.Collection.isNotEmpty(callbackHandlerList)){
+        if (CollectionUtilPlus.Collection.isNotEmpty(callbackHandlerList)) {
             for (ICallBackHandler<?, ?> callBackHandler : callbackHandlerList) {
                 String eventName = callBackHandler.getEvent().getClass().getSimpleName();
                 try {
@@ -172,7 +172,7 @@ public abstract class AFeishuCbHttpController {
         byte[] iv = Arrays.copyOfRange(decode, 0, 16);
         byte[] contentByte = Arrays.copyOfRange(decode, 16, decode.length);
         try {
-            String content = DigestUtilPlus.AES.decryptCBCNoPadding(contentByte, DigestUtilPlus.Base64.decodeBase64(key), iv);
+            String content = DigestUtilPlus.AES.decryptCBCPKCS7Padding(contentByte, DigestUtilPlus.Base64.decodeBase64(key), iv);
             return Jsons.DEFAULT.fromJson(content, EventCbData.class);
         } catch (Exception e) {
             throw new BusinessException("解密失败");
