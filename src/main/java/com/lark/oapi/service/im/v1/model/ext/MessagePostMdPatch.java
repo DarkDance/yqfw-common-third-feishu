@@ -6,16 +6,16 @@ import com.google.gson.annotations.SerializedName;
  * @author wiiyaya
  * @since 2025/7/31
  */
-public class MessagePostMd extends MessagePostElement {
+public class MessagePostMdPatch extends MessagePostElement {
 
     @SerializedName("text")
     private String text;
 
-    public MessagePostMd() {
+    public MessagePostMdPatch() {
         this.tag = "md";
     }
 
-    public MessagePostMd(Builder builder) {
+    public MessagePostMdPatch(Builder builder) {
         this.tag = "md";
         this.text = builder.text;
     }
@@ -48,8 +48,8 @@ public class MessagePostMd extends MessagePostElement {
             return this;
         }
 
-        public MessagePostMd build() {
-            return new MessagePostMd(this);
+        public MessagePostMdPatch build() {
+            return new MessagePostMdPatch(this);
         }
     }
 }
