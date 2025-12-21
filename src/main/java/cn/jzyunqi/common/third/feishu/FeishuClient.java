@@ -30,7 +30,11 @@ public class FeishuClient {
         List<FeishuAuth> feishuAuthList = feishuAuthHelper.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
             if(!clientMap.containsKey(feishuAuth.getAppId())){
-                clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+                try {
+                    clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
+                } catch (Exception e) {
+                    log.error("FeishuClient [{}] init error: ", feishuAuth.getAppId(), e);
+                }
             }else{
                 log.info("FeishuClient [{}] already init", feishuAuth.getAppId());
             }
