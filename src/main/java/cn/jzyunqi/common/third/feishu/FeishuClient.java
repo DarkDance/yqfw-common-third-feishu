@@ -33,7 +33,7 @@ public class FeishuClient {
                 try {
                     clientMap.put(feishuAuth.getAppId(), getClient(feishuAuth));
                 } catch (Exception e) {
-                    log.error("FeishuClient [{}] init error: ", feishuAuth.getAppId(), e);
+                    log.error("FeishuClient [{}] add error: ", feishuAuth.getAppId(), e);
                 }
             }else{
                 log.info("FeishuClient [{}] already init", feishuAuth.getAppId());

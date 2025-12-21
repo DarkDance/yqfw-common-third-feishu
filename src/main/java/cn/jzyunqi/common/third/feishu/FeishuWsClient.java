@@ -41,7 +41,11 @@ public class FeishuWsClient {
         List<FeishuAuth> feishuAuthList = feishuAuthHelper.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
             if (feishuAuth.getWsConnect() && !clientMap.containsKey(feishuAuth.getAppId())) {
-                clientMap.put(feishuAuth.getAppId(), prepareAndStart(feishuAuth));
+                try {
+                    clientMap.put(feishuAuth.getAppId(), prepareAndStart(feishuAuth));
+                } catch (Exception e) {
+                    log.error("FeishuWsClient [{}] add error: ", feishuAuth.getAppId(), e);
+                }
             }
         }
     }
