@@ -7,7 +7,6 @@ import cn.jzyunqi.common.third.feishu.callback.module.EventCbData;
 import cn.jzyunqi.common.utils.CollectionUtilPlus;
 import cn.jzyunqi.common.utils.DigestUtilPlus;
 import cn.jzyunqi.common.utils.StringUtilPlus;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lark.oapi.core.Constants;
 import com.lark.oapi.event.EventDispatcher;
 import com.lark.oapi.event.ICallBackHandler;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tools.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
