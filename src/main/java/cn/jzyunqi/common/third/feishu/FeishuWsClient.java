@@ -40,12 +40,18 @@ public class FeishuWsClient {
     public void init() {
         List<FeishuAuth> feishuAuthList = feishuAuthHelper.getFeishuAuthList();
         for (FeishuAuth feishuAuth : feishuAuthList) {
-            if (feishuAuth.getWsConnect() && !clientMap.containsKey(feishuAuth.getAppId())) {
-                try {
-                    clientMap.put(feishuAuth.getAppId(), prepareAndStart(feishuAuth));
-                } catch (Exception e) {
-                    log.error("FeishuWsClient [{}] add error: ", feishuAuth.getAppId(), e);
+            if (feishuAuth.getWsConnect()) {
+                if(!clientMap.containsKey(feishuAuth.getAppId())){
+                    try {
+                        clientMap.put(feishuAuth.getAppId(), prepareAndStart(feishuAuth));
+                    } catch (Exception e) {
+                        log.error("FeishuWsClient [{}] add error: ", feishuAuth.getAppId(), e);
+                    }
+                }else{
+                    log.warn("FeishuWsClient [{}] already init", feishuAuth.getAppId());
                 }
+            }else{
+                log.warn("FeishuWsClient [{}] not config wsConnect", feishuAuth.getAppId());
             }
         }
     }
