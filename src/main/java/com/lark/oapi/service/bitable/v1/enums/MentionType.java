@@ -11,7 +11,7 @@ public enum MentionType {
     BITABLE("Bitable"),
     ;
 
-    private String value;
+    private final String value;
 
     MentionType(String value) {
         this.value = value;
