@@ -4,7 +4,7 @@ package com.lark.oapi.service.bitable.v1.enums;
  * @author wiiyaya
  * @since 2026/2/7
  */
-public enum ConditionDateEnum {
+public enum SepcDateValueEnum {
     TODAY("Today"),
     TOMORROW("Tomorrow"),
     YESTERDAY("Yesterday"),
@@ -18,7 +18,7 @@ public enum ConditionDateEnum {
     THENEXTMONTH("TheNextMonth");
     private final String value;
 
-    ConditionDateEnum(String value) {
+    SepcDateValueEnum(String value) {
         this.value = value;
     }
 
