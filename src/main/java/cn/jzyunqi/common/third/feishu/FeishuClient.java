@@ -70,8 +70,8 @@ public class FeishuClient {
             config.setBaseUrl(BaseUrlEnum.FeiShu.getUrl());
             config.setAppType(AppType.SELF_BUILT);
             config.setDisableTokenCache(false);
-            config.setRequestTimeOut(5);
-            config.setTimeOutTimeUnit(TimeUnit.SECONDS);
+            //config.setRequestTimeOut(5);
+            //config.setTimeOutTimeUnit(TimeUnit.SECONDS);
             config.setLogReqAtDebug(true);
             clientMap.get(feishuAuth.getAppId()).setConfig(config);
             log.info("FeishuClient [{}] config change success", feishuAuth.getAppId());
@@ -87,7 +87,7 @@ public class FeishuClient {
     private Client getClient(FeishuAuth feishuAuth) {
         try {
             Client client = Client.newBuilder(feishuAuth.getAppId(), feishuAuth.getAppSecret())
-                    .requestTimeout(5, TimeUnit.SECONDS)
+                    //.requestTimeout(5, TimeUnit.SECONDS)
                     //.disableTokenCache()
                     .logReqAtDebug(true)
                     .build();
